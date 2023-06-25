@@ -100,7 +100,7 @@ while(i>1){
 ```
 
 # 数据结构
-1. 请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
+## 1. 请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
 
  
 
@@ -109,7 +109,7 @@ while(i>1){
 输入：s = "We are happy."
 输出："We%20are%20happy."
 ```
-法1
+法1：双指针法
 ```cpp
 class Solution {
 public:
@@ -133,6 +133,83 @@ public:
             }
         }
     return s;
+    }
+};
+```
+
+法2：辅助字符串法
+```cpp
+class Solution {
+public:
+    string replaceSpace(string s) {
+        string temp;//创建一个辅助字符串
+        for(int i=0;i<s.length();i++){//对原字符串依次判断。
+            if (s[i]!=' ') temp+=s[i];//不是空格，保留
+            if (s[i]==' ') temp+="%20";//是空格就替换（注意==）
+        }
+        return temp;
+    }
+};
+
+## 2. 输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。
+
+ 
+
+示例 1：
+```
+输入：head = [1,3,2]
+输出：[2,3,1]
+```
+法1. 回溯
+```cpp
+class Solution {
+public:
+    vector<int> reversePrint(ListNode* head) {
+        recur(head);
+        return res;
+    }
+private:
+    vector<int> res;
+    void recur(ListNode* head) {
+        if(head == nullptr) return;\\终止条件： 当 head == None 时，代表越过了链表尾节点，则返回空列表
+        recur(head->next);\\递推工作： 访问下一节点 head.next
+        res.push_back(head->val);\\将当前节点值 head.val 加入列表 tmp
+    }
+}
+```
+法2. reverse函数
+```cpp
+class Solution {
+public:
+    vector<int> reversePrint(ListNode* head) {
+        vector<int> s;
+        while(head != NULL)
+        {
+            s.push_back(head->val);
+            head = head->next;
+        }
+        reverse(s.begin() , s.end()); //最后进行反转
+        return s;
+    }
+};
+```
+法3. 辅助栈
+链表只能 从前至后 访问每个节点，而题目要求 倒序输出 各节点值，这种 先入后出 的需求可以借助 栈 来实现。
+```cpp
+class Solution {
+public:
+    vector<int> reversePrint(ListNode* head) {
+        stack<int> stk;
+        while(head != nullptr) {
+            stk.push(head->val);
+            head = head->next;
+        }
+        vector<int> res;
+        while(!stk.empty()) {
+            res.push_back(stk.top());
+            stk.pop();
+        }
+        return res;
     }
 };
 ```

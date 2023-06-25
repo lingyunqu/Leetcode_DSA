@@ -210,3 +210,62 @@ public:
     }
 };
 ```
+
+## 3. 用两个栈实现一个队列。队列的声明如下，请实现它的两个函数 appendTail 和 deleteHead ，分别完成在队列尾部插入整数和在队列头部删除整数的功能。(若队列中没有元素，deleteHead 操作返回 -1 )
+示例 1：
+```
+输入：
+["CQueue","appendTail","deleteHead","deleteHead","deleteHead"]
+[[],[3],[],[],[]]
+输出：[null,null,3,-1,-1]
+```
+示例 2：
+```
+输入：
+["CQueue","deleteHead","appendTail","appendTail","deleteHead","deleteHead"]
+[[],[],[5],[2],[],[]]
+输出：[null,-1,null,null,5,2]
+```
+列表倒序操作可使用双栈实现：设有含三个元素的栈 A = [1,2,3] 和空栈 B = [] 。若循环执行 A 元素出栈并添加入栈 B ，直到栈 A 为空，则 A = [] , B = [3,2,1] ，即栈 B 元素为栈 A 元素倒序。
+利用栈 B 删除队首元素：倒序后，B 执行出栈则相当于删除了 A 的栈底元素，即对应队首元素。
+题目要求实现 加入队尾appendTail() 和 删除队首deleteHead() 两个函数的正常工作。因此，可以设计栈 A 用于加入队尾操作，栈 B 用于将元素倒序，从而实现删除队首元素。
+
+push_back()：将一个新的元素加到vector的最后（当前最后一个元素的下一个元素）
+stack::push():在栈顶增加一个元素
+queue::push():在队列末端增加一个元素
+
+```cpp
+class CQueue {
+public:
+	stack<int> A, B;
+    CQueue() {}
+    
+    void appendTail(int value) {
+	A.push(value);
+    }
+    
+    int deleteHead() {
+	if(!B.empty()){//删除的时候先检查B是不是空(栈 B 元素为栈 A 元素倒序，B执行出栈则相当于删除了A的栈底元素)，不是空的直接删除。 
+		int tmp = B.top();
+		B.pop();
+		return tmp;
+    }
+	if (A.empty()) return -1;//.如果 st2 是空的，检查 st1，如果 st1 也是空的，说明没有可以删除的元素， 返回 -1。
+	while (!A.empty()){//如果 st1 不是空的
+		int tmp=A.top();//把 st1 里面元素全部倒过去
+		A.pop();
+		B.push(tmp);
+	}
+	int tmp=B.top();
+	B.pop();//再删除 st2 栈顶元素
+	return tmp;
+};
+
+/**
+ * Your CQueue object will be instantiated and called as such:
+ * CQueue* obj = new CQueue();
+ * obj->appendTail(value);
+ * int param_2 = obj->deleteHead();
+ */
+```
+

@@ -299,6 +299,7 @@ public:
 ‘.’出现正确情况：只出现一次，且在e的前面
 ‘e’出现正确情况：只出现一次，且出现前有数字
 ‘+’‘-’出现正确情况：只能在开头和e后一位
+```cpp
 class Solution {
 public:
     bool isNumber(string s) {
@@ -306,7 +307,7 @@ public:
 	int i=0;
  	while(i<s.size() && s[i]==' ')//从头开始，如果有空格
  		i++;//计数+1
-   	s=s.substr(i)//substr:返回一个新建的初始化为string对象的子串的拷贝string对象，字串是在字符位置pos开始，跨越len个字符对象的部分
+   	s=s.substr(i);//substr:返回一个新建的初始化为string对象的子串的拷贝string对象，字串是在字符位置pos开始，跨越len个字符对象的部分
     	while (s.back()==' ')//从末端开始，如果是空格
      		s.pop_back();//则删除空格
 
@@ -324,7 +325,7 @@ public:
        			eFlag=true;
 	  		numFlag=false;//e后面必须跟着一个整数，所以出现e之后标为false，判断是否为整数
      		}
-       		else if ((s[i]=='+'||s[i]=='-')&&(i==0||s[i-1]=='e'||s[i-1]=='E')){
+       		else if ((s[i]=='+'||s[i]=='-')&&(i==0||s[i-1]=='e'||s[i-1]=='E')){// 判定为'+''-'符号，只能出现在第一位或者紧接'e'后面
 	 	}
    		else {
      			return false;
@@ -333,3 +334,122 @@ public:
     return numFlag;
     }
 };
+```
+
+## 反转链表
+定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
+
+ 
+```
+示例:
+
+输入: 1->2->3->4->5->NULL
+输出: 5->4->3->2->1->NULL
+```
+法1. 迭代（双指针）:考虑遍历链表，并在访问各节点时修改 next 引用指向
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+	ListNode *cur=head, *pre=nullptr;//cur指针指向链表的头节点，pre指针指向null
+	while (cur!=nullptr){//终止条件：cur指针指到链表尾的null
+		ListNode *tmp = cur->next; //暂存后继节点cur
+		cur->next=pre; //修改next引用指向pre
+		pre=cur;//pre暂存cur
+		cur=tmp;//cur访问下一节点tmp
+    	}
+	    return pre;
+    }
+};
+```
+
+法2. 递归
+考虑使用递归法遍历链表，当越过尾节点后终止递归，在回溯时修改各节点的 next 引用指向。
+recur(cur, pre) 递归函数：
+终止条件：当 cur 为空，则返回尾节点 pre （即反转链表的头节点）；
+递归后继节点，记录返回值（即反转链表的头节点）为 res ；
+修改当前节点 cur 引用指向前驱节点 pre ；
+返回反转链表的头节点 res ；
+reverseList(head) 函数：
+调用并返回 recur(head, null) 。传入 null 是因为反转链表后， head 节点指向 null ；
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+	return recur(head, nullptr);
+    }
+private:
+ListNode* reverseList(ListNode* head, ListNode* pre) {
+	if (cur==nullptr) return pre;//终止条件：cur为空，这时候意味着已经指到链表尾了，返回pre
+	ListNode* res=recur(cur->next, cur);//递归后续结点
+	cur->next=pre;//修改结点引用指向
+	return res;//返回反转列表的头结点
+};
+```
+
+## 定义栈的数据结构，请在该类型中实现一个能够得到栈的最小元素的 min 函数在该栈中，调用 min、push 及 pop 的时间复杂度都是 O(1)。
+
+```
+示例:
+
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.min();   --> 返回 -3.
+minStack.pop();
+minStack.top();      --> 返回 0.
+minStack.min();   --> 返回 -2.
+```
+建立一个辅助栈，储存栈 A 中所有 非严格降序 元素的子序列，则栈 A 中的最小元素始终对应栈 B 的栈顶元素。此时， min() 函数只需返回栈 B 的栈顶元素即可。
+
+```cpp
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    MinStack() {
+
+    }
+    
+    void push(int x) {
+
+    }
+    
+    void pop() {
+
+    }
+    
+    int top() {
+
+    }
+    
+    int min() {
+        
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(x);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->min();
+ */
+

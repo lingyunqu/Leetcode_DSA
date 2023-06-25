@@ -150,11 +150,8 @@ public:
         return temp;
     }
 };
-
+```
 ## 2. 输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。
-
- 
-
 示例 1：
 ```
 输入：head = [1,3,2]
@@ -201,13 +198,13 @@ public:
     vector<int> reversePrint(ListNode* head) {
         stack<int> stk;
         while(head != nullptr) {
-            stk.push(head->val);
+            stk.push(head->val);//入栈： 遍历链表，将各节点值 push 入栈。
             head = head->next;
         }
         vector<int> res;
         while(!stk.empty()) {
-            res.push_back(stk.top());
-            stk.pop();
+            res.push_back(stk.top());//出栈：将各结点值存储于数组
+            stk.pop();//出栈： 将各节点值 pop 出栈，并返回
         }
         return res;
     }

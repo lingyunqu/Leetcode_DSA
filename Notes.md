@@ -175,6 +175,7 @@ private:
 }
 ```
 法2. reverse函数
+reverse函数用于反转[first, last) 范围内的元素，没有返回值
 ```cpp
 class Solution {
 public:
@@ -422,25 +423,27 @@ minStack.min();   --> 返回 -2.
 ```cpp
 class MinStack {
 public:
-    /** initialize your data structure here. */
-    MinStack() {
-
+    stack <int> A,B;
+    MinStack() {}
+    
+    void push(int x) {//重点为保持栈 B 的元素是 非严格降序 的；
+	A.push(x);//执行「元素 x 压入栈 A」 ；
+	if(B.empty()|| B.top()>=x)//若「栈 B 为空」或「x ≤栈 B 的栈顶元素」
+		B.push(x);//则执行「元素 x 压入栈 B」 ；
     }
     
-    void push(int x) {
-
+    void pop() {//重点为保持栈 A , B 的 元素一致性 ；
+	if(A.top()==B.top())//执行「栈 A 元素出栈」，将出栈元素记为 y ；若 「y 等于栈 B 的栈顶元素」，则执行「栈 B 元素出栈」；
+		B.pop();
+	A.pop();
     }
     
-    void pop() {
-
+    int top() {// 直接返回栈 A 的栈顶元素，即返回 A.peek() ；
+	return A.top();
     }
     
-    int top() {
-
-    }
-    
-    int min() {
-        
+    int min() {//直接返回栈 B 的栈顶元素，即返回 B.peek() ；
+        return B.top();
     }
 };
 
@@ -452,4 +455,145 @@ public:
  * int param_3 = obj->top();
  * int param_4 = obj->min();
  */
+ ```
 
+ ## 请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null。
+
+法一：哈希表
+利用哈希表的查询特点，考虑构建 原链表节点 和 新链表对应节点 的键值对映射关系，再遍历构建新链表各节点的 next 和 random 引用指向即可。
+算法流程：
+1.若头节点 head 为空节点，直接返回 null ；
+2.初始化： 哈希表 dic ， 节点 cur 指向头节点；
+3.复制链表：
+	1)建立新节点，并向 dic 添加键值对 (原 cur 节点, 新 cur 节点） ；
+	2)cur 遍历至原链表下一节点；
+4.构建新链表的引用指向：
+	1)构建新节点的 next 和 random 引用指向；
+	2)cur 遍历至原链表下一节点；
+5.返回值： 新链表的头节点 dic[cur] ；
+```cpp
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(head==nullptr) return nullptr;//若头节点 head 为空节点，直接返回 null ；
+	Node *cur=head;//初始化： 哈希表 dic ， 节点 cur 指向头节点
+	unordered_map<Node*, Node*> map;
+	//3.复制链表：
+	while (cur!=nullptr){
+		map[cur]=new Node(cur->val);//建立新节点，并向 dic 添加键值对 (原 cur 节点, 新 cur 节点） ；
+		cur=cur->next;//cur 遍历至原链表下一节点；
+    }
+	    cur=head;
+	//4.构建新链表的引用指向：
+	while (cur!=nullptr){
+		map[cur]->next=map[cur]->next;
+		map[cur]->random=map[cur]->random;
+		cur=cur->next;
+	}
+	return map[head];
+};
+```
+
+法二：拼接 + 拆分
+算法流程：
+1. 复制各节点，构建拼接链表:
+	设原链表为 node1→node2→⋯ 
+2. 构建新链表各节点的 random 指向： node1→node1_new→node2→node2_new→⋯
+	当访问原节点 cur 的随机指向节点 cur.random 时，对应新节点 cur.next 的随机指向节点为 cur.random.next 。
+3. 拆分原 / 新链表：
+	设置 pre / cur 分别指向原 / 新链表头节点，遍历执行 pre.next = pre.next.next 和 cur.next = cur.next.next 将两链表拆分开。
+4. 返回新链表的头节点 res 即可。
+```cpp
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(head==nullptr) return nullptr;
+	Node* cur=head;
+	//1. 复制各结点，构建拼接链表
+	while (cur!=nullptr){
+ 		Node* tmp = new Node(cur->val);
+		tmp->next=cur->next;
+		cur->next=tmp;
+		cur=tmp->next;
+    }
+	//2.构建各新节点的random指向
+	cur=head;
+	    while(cur!=nullptr){
+		    if(cur->random!=nullptr)
+			    cur->next->random=cur->random->next;
+		    cur=cur->next->next;
+	    }
+	//拆分链表
+ 	cur=head->next;
+	Node* pre=head, *res=head->next;
+	while (cur->next != nullptr){
+		pre->next=pre->next->next;
+		cur->next=cur->next->next;
+		pre=pre->next;
+		cur=cur->next;
+	}
+	    pre->next=nullptr;
+	    return res;
+    }
+};
+```
+
+## 字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
+获取字符串 s[n:] 切片和 s[:n] 切片，使用 "+" 运算符拼接并返回即可。
+```cpp
+class Solution {
+public:
+    string reverseLeftWords(string s, int n) {
+	return s.substr(n, s.size())+s.substr(0,n)
+    }
+};
+```
+
+## 给定一个数组 nums 和滑动窗口的大小 k，请找出所有滑动窗口里的最大值。
+窗口对应的数据结构为 双端队列 ，本题使用 单调队列 即可解决以上问题。遍历数组时，每轮保证单调队列 deque ：
+deque 内 仅包含窗口内的元素 ⇒ 每轮窗口滑动移除了元素 nums[i−1] ，需将 deque 内的对应元素一起删除。
+deque 内的元素 非严格递减 ⇒ 每轮窗口滑动添加了元素 nums[j+1] ，需将deque 内所有 <nums[j+1] 的元素删除。
+```cpp
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+	vector<int> res:
+	if(num.size()==0||k==0) return res;
+	deque<int> d;
+	for (int j=0, i=1-k; j<nums.size(); i++,j++){
+		
+	}	
+    }
+};
+```

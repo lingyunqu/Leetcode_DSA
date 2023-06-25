@@ -37,7 +37,7 @@ int algorithm(int N){
   return count;
 }
 ```
-3. 平方复杂度$O(N^2)$:两层循环相互独立，都与 N 呈线性关系，因此总体与 N 呈平方关系，时间复杂度为 $O(N^2)$。
+3. 平方复杂度 $O(N^2)$ :两层循环相互独立，都与 N 呈线性关系，因此总体与 N 呈平方关系，时间复杂度为 $O(N^2)$。
 ```cpp
 int algorithm(int N){
   int count=0;

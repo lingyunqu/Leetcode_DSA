@@ -491,22 +491,24 @@ public:
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        if(head==nullptr) return nullptr;//若头节点 head 为空节点，直接返回 null ；
-	Node *cur=head;//初始化： 哈希表 dic ， 节点 cur 指向头节点
-	unordered_map<Node*, Node*> map;
-	//3.复制链表：
-	while (cur!=nullptr){
-		map[cur]=new Node(cur->val);//建立新节点，并向 dic 添加键值对 (原 cur 节点, 新 cur 节点） ；
-		cur=cur->next;//cur 遍历至原链表下一节点；
+        if(head == nullptr) return nullptr;
+        Node* cur = head;
+        unordered_map<Node*, Node*> map;
+        // 3. 复制各节点，并建立 “原节点 -> 新节点” 的 Map 映射
+        while(cur != nullptr) {
+            map[cur] = new Node(cur->val);
+            cur = cur->next;
+        }
+        cur = head;
+        // 4. 构建新链表的 next 和 random 指向
+        while(cur != nullptr) {
+            map[cur]->next = map[cur->next];
+            map[cur]->random = map[cur->random];
+            cur = cur->next;
+        }
+        // 5. 返回新链表的头节点
+        return map[head];
     }
-	    cur=head;
-	//4.构建新链表的引用指向：
-	while (cur!=nullptr){
-		map[cur]->next=map[cur]->next;
-		map[cur]->random=map[cur]->random;
-		cur=cur->next;
-	}
-	return map[head];
 };
 ```
 

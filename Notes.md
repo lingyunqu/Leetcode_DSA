@@ -643,3 +643,21 @@ public:
 	}
 }
 ```
+
+```cpp
+class Solution{
+public:
+	int search(vector<int>&nums, int target){
+		return helper(nums, target) - helper(nums, target-1);
+	}
+private:
+	int helper(vector<int>&nums, int tar){
+		int i=0,j=num.size()-1;
+		while(i<=j){
+			int m=(i+j)/2;
+			if(nums[m]<=tar) i=m+1;
+			else j=m-1;
+		}
+		return i;
+	}
+}

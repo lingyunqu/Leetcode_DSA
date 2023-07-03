@@ -675,3 +675,38 @@ class Solution{
 }
 }
 ```
+
+
+```cpp
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        
+        int i = 0, j = nums.size() - 1;
+        if(nums.size()==0)  return 0;//如果输入为空返回0，避免出现bug
+
+        while(i <= j) {// 搜索左边界 left
+            int m = (i + j) / 2;
+            if(nums[m] < target) i = m + 1;/*当m位置数字小于target时，移动i到m+1位置；
+            //当m位置数字大于等于target时，将j移动到m-1位置。 
+            如此，最后可找到的是位置j，j是所有小于target的数字中最靠右的*/
+            else j = m - 1;
+        }
+        int left = j;
+        // 若数组中无 target ，则提前返回
+        if(i>=nums.size()) return 0;//做完循环后i==j+1,如果i位于nums.size()或更多，说明i超出范围
+        if(i>=nums.size()-1 && nums[i] != target) return 0;//如果i不为target，说明此时没有target   
+        // 搜索右边界 right
+        i = 0; j = nums.size() - 1;
+        while(i <= j) {
+            int m = (i + j) / 2;
+            if(nums[m] <= target) i = m + 1;/*当m位置数字小于等于target时，移动i到m+1位置；
+            //当m位置数字大于target时，将j移动到m-1位置。 
+            如此，最后可找到的是位置i，i是所有大于target的数字中最靠左的*/
+            else j = m - 1;
+        }
+        int right = i;
+        return right - left - 1;
+    }
+};
+```

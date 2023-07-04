@@ -661,7 +661,7 @@ private:
 		return i;
 	}
 }
-
+```
 ## 一个长度为n-1的递增排序数组中的所有数字都是唯一的，并且每个数字都在范围0～n-1之内。在范围0～n-1内的n个数字中有且只有一个数字不在该数组中，请找出这个数字。
 
 
@@ -709,4 +709,49 @@ public:
         return right - left - 1;
     }
 };
+```
+
+从上到下打印二叉树
+
+```cpp
+class Solution {
+public:
+    vector<int> levelOrder(TreeNode* root) {
+        vector<int> res;//捏了一个res，这个是新做出来的准备打印的结点
+        if (!root) return res;//根判空返回
+        queue<TreeNode*> que;//捏了一个que，这是一个队列，用来存储你还没有遍历过的结点
+        que.push(root);//队列先进根
+        while (!que.empty()) {
+            TreeNode* node = que.front();//循环取队头：然后把这个头从队里踢走，
+            que.pop();//然后从que队列中拿出第一个结点，
+            res.push_back(node->val);//看值进左右：把这个头的数值给res，左右子节点存在的话塞进que中
+            if (node->left) que.push(node->left);//如果结点有左右子叶，将结点的左右子叶放入队列末尾
+            if (node->right) que.push(node->right);
+        }
+        return res;
+    }
+};
+/*遍历完成后可以保证你的res队列中是所有结点从上到下从左到右的
+（因为每一个结点都会放入que，如果它有左右结点也会进入que，而他们进入que的顺序是符合题目要求的）
+找过左右结点的则放入res，这样保证不重不漏 */
+```
+
+
+```cpp
+
+int fibonacci(int n, vector<int> dp) {//将dp传递给fibonacci
+    if (n == 0) return 0;           // 返回 f(0)
+    if (n == 1) return 1;           // 返回 f(1)
+    if (dp[n] != 0) return dp[n];   // 若 f(n) 以前已经计算过，则直接返回记录的解dp[n]=f（n-1）+f（n-2）
+    dp[n] = fibonacci(n - 1, dp) + fibonacci(n - 2, dp); // 如果f（n）以前没有计算过，则将f（n）计算然后记录到对应的dp（n）中
+    return dp[n];
+}
+
+// 求第 n 个斐波那契数
+int fibonacciMemorized(int n) {
+    vector<int> dp(n + 1, 0); // 意思是一个动态数组，叫做dp，一共有n+1个数据，每个数据都是0，用于保存 f(0) 至 f(n) 问题的解
+    return fibonacci(n, dp);
+}
+
+
 ```

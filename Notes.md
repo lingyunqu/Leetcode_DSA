@@ -717,16 +717,16 @@ public:
 class Solution {
 public:
     vector<int> levelOrder(TreeNode* root) {
-        vector<int> res;//捏了一个res，这个是新做出来的准备打印的结点
-        if (!root) return res;//根判空返回
-        queue<TreeNode*> que;//捏了一个que，这是一个队列，用来存储你还没有遍历过的结点
-        que.push(root);//队列先进根
-        while (!que.empty()) {
-            TreeNode* node = que.front();//循环取队头：然后把这个头从队里踢走，
-            que.pop();//然后从que队列中拿出第一个结点，
-            res.push_back(node->val);//看值进左右：把这个头的数值给res，左右子节点存在的话塞进que中
-            if (node->left) que.push(node->left);//如果结点有左右子叶，将结点的左右子叶放入队列末尾
-            if (node->right) que.push(node->right);
+        vector<int> res;//捏了一个res，这个是新做出来的准备打印的结点，创建一个空的向量 res，用于存储最终的层序遍历结果。
+        queue<TreeNode*> que;//捏了一个que，这是一个队列，用来存储你还没有遍历过的结点，
+        if (!root) return res;//根判空返回，如果根节点 root 为空，表示二叉树为空树，直接返回空的结果向量 res。
+        que.push(root);//队列先进根，队列中初始只有根节点 root。
+        while (!que.empty()) {//进入一个循环，只要队列 que 不为空，就一直进行遍历操作。
+            TreeNode* node = que.front();//循环取队头：在每次循环迭代中，通过 que.front() 获取队列头部的节点，并将其赋值给指针变量 node。，然后把这个头从队里踢走，
+            que.pop();//然后从que队列中拿出第一个结点，使用 que.pop() 将已经访问过的队列头部节点移出队列。
+            res.push_back(node->val);//看值进左右：把这个头的数值给res，将当前节点 node 的值 node->val 添加到结果向量 res 中，以记录遍历顺序。，左右子节点存在的话塞进que中
+            if (node->left) que.push(node->left);//如果结点有左右子叶，将结点的左右子叶放入队列末尾，如果当前节点 node 存在左子节点，将左子节点加入队列 que 中。
+            if (node->right) que.push(node->right);//如果当前节点 node 存在右子节点，将右子节点加入队列 que 中。
         }
         return res;
     }

@@ -30,7 +30,7 @@ public:
     }
 };
 ```
-
+左闭右开：不包含right
 ```
 class Solution {
 public:
@@ -56,4 +56,44 @@ public:
 
 ## 2 
 27. 移除元素
+```
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int fast = 0; //用来寻找数组里删除目标值之后的元素
+        int slow = 0; //新数组里需要更新的位置
+        for(fast = 0; fast < nums.size(); fast++){//快指针的移动
+            if(nums[fast]!=val){
+                nums[slow] = nums[fast];
+                slow++;
+            }
+        }
+        return slow;
+    }
+};
+```
 
+## 3
+977
+```
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        vector<int> result(nums.size());   //创建 result 向量时，使用 resize() 函数来分配足够的空间，以便能够存储所有的元素。
+        int k=nums.size()-1;
+        for(int i=0,j=nums.size()-1;i<=j;){//定义两个指针 i 和 j，分别指向 nums 的开头和结尾，循环条件是 i <= j
+            if(nums[i]*nums[i]>nums[j]*nums[j]){//如果 nums[i]*nums[i] 大于 nums[j]*nums[j]，说明 nums[i] 的平方更大
+                result[k]=nums[i]*nums[i];//将nums[i]的平方存储在 result 的末尾位置 k
+                k--;//指针 k 向前移动一位。
+                i++;//指针 i 向后移动一位
+            }
+            else{//如果 nums[i]*nums[i] 不大于 nums[j]*nums[j]，说明 nums[j] 的平方更大
+                result[k] = nums[j]*nums[j];//将nums[j]的平方存储在 result 的末尾位置 k
+                k--;//指针 k 向前移动一位。
+                j--;//指针 j 向前移动一位
+            }
+        }
+        return result;
+    }
+};
+```

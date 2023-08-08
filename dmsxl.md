@@ -1,6 +1,6 @@
 代码随想录的听课及做题笔记
 
-##1
+## 1
 704. 二分查找
 ```
 class Solution {
@@ -97,7 +97,7 @@ public:
     }
 };
 ```
-##4
+## 4
 209
 ```
 class Solution {
@@ -119,6 +119,44 @@ public:
         end++;
         }
         return result == INT_MAX ? 0:result;
+    }
+};
+```
+## 5
+59
+```
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        int num = 1;
+        vector<vector<int>> matrix(n, vector<int>(n));//创建一个二维向量matrix，大小为n x n，用于存储生成的螺旋矩阵。初始时，二维向量中的所有元素都被初始化为0。
+        int left = 0, right = n - 1 //由于数组的索引是从0开始的，所以右边界的索引应该是n-1，其中n是矩阵的维度。left表示矩阵的左边界，初始值为0，而right表示矩阵的右边界，初始值为n-1。这样，初始时螺旋矩阵的宽度为n。
+        int top = 0, bottom = n - 1;//top表示矩阵的上边界，初始值为0，而bottom表示矩阵的下边界，初始值为n-1。这样，初始时螺旋矩阵的高度为n。
+        while (left <= right && top <= bottom) {
+            for (int column = left; column <= right; column++) {//使用一个for循环从左到右填充矩阵的上边界。循环变量column从left开始，逐渐增加到right。
+                matrix[top][column] = num;//将num赋值给matrix[top][column]
+                num++;
+            }
+            for (int row = top + 1; row <= bottom; row++) {//使用一个for循环从上到下填充矩阵的右边界。
+                matrix[row][right] = num;
+                num++;
+            }
+            if (left < right && top < bottom) {// 如果left小于right且top小于bottom，说明还有内部的环需要填充。
+                for (int column = right - 1; column > left; column--) {//使用一个for循环从右到左填充矩阵的下边界。
+                    matrix[bottom][column] = num;
+                    num++;
+                }
+                for (int row = bottom; row > top; row--) {//使用一个for循环从下到上填充矩阵的左边界。
+                    matrix[row][left] = num;
+                    num++;
+                }
+            }
+            left++;
+            right--;
+            top++;
+            bottom--;
+        }
+        return matrix;
     }
 };
 ```

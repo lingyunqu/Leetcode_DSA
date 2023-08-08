@@ -97,3 +97,28 @@ public:
     }
 };
 ```
+##4
+209
+```
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        long long sum = 0 ;//声明一个名为sum的长整型变量，并将其初始化为0。这个变量用于计算滑动窗口中元素的总和
+        int start=0, end=0; //声明两个整型变量start和end，并将它们都初始化为0。这两个变量用于表示滑动窗口的起始位置和结束位置。
+        int n=nums.size();// 声明一个整型变量n，并将其赋值为nums向量的大小。这个变量用于表示输入向量nums的长度。
+        int result = INT_MAX;//通过将result初始化为INT_MAX，代码表达了一个意图，即将result设置为一个初始值，该值在后续的计算中可以被替换为更小的值。这种做法常用于需要找到最小值的算法中，例如在搜索最短路径或最小生成树等问题时。在这些情况下，将result初始化为INT_MAX可以确保在找到更小的值之前，任何其他可能的值都会被替换掉。
+
+
+        while (end<n){//使用一个循环来遍历 nums，循环条件是 end 小于 n。将滑动窗口的右边界 end 向右移动，直到子数组的和大于等于目标值 s 或者 end 达到数组的末尾。在每次移动 end 的过程中，会更新子数组的和 sum。
+            sum += nums[end];//在循环内部，将 nums[end] 加到 sum 中。
+            while(sum>=target){//持续向后移动更新滑动窗口，如果是if，则只判断一次
+                result = min(result, end-start+1);//最终取的最小的长度
+                sum -= nums[start];//更新 sum 的值，使其反映出移动 start 指针后的新的子数组的和。
+                start++;//将 start 指针向右移动一位，继续寻找更短的子数组
+            }
+        end++;
+        }
+        return result == INT_MAX ? 0:result;
+    }
+};
+```

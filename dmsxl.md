@@ -161,3 +161,41 @@ public:
     }
 };
 ```
+
+## 6
+203
+```
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        while(head!=NULL && head->val == val){//持续移除，所以用while
+           ListNode* tmp = head; //创建一个临时指针 tmp 指向 head
+           //在修改链表结构之前，我们需要保存当前节点的指针，以便在删除节点后能够释放该节点的内存。
+            head = head->next; //head更新为下一个节点
+            delete tmp;
+        }
+        ListNode* cur=head;
+        while(cur != NULL && cur->next!=NULL){//如果 cur 为 NULL，说明已经遍历到链表的末尾，没有更多的节点需要处理，循环结束。如果 cur->next 为 NULL，说明当前节点是链表中的最后一个节点，不需要再继续判断和删除操作，循环结束。
+            if(cur->next->val == val){
+                ListNode* tmp = cur->next;//如果是，创建一个临时指针 tmp 指向 cur->next，将当前节点的下一个节点的指针保存到临时指针 tmp 中
+                cur->next=cur->next->next;//将 cur->next 更新为下一个节点的下一个节点
+                delete tmp;//删除tmp
+            }
+            else{
+                cur = cur->next;//cur更新为下一个节点
+            }
+        }
+    return head;
+    }
+};
+```

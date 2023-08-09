@@ -199,3 +199,28 @@ public:
     }
 };
 ```
+
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode* dummyhead = new ListNode(0);
+        dummyhead->next = head;
+        ListNode* cur = dummyhead; 
+        while(cur->next != NULL){//使用一个 while 循环来遍历链表，直到当前节点 cur 为 NULL 或者当前节点的下一个节点 cur->next 为 NULL
+            if(cur->next->val==val){//检查当前节点的下一个节点的值是否等于 val
+            //如果当前节点的下一个节点的值为val，则需要删除
+                ListNode* tmp = cur->next;//建一个临时指针 tmp 指向当前节点的下一个节点
+                cur->next=cur->next->next;//当前节点的 next 指针更新为下一个节点的下一个节点，即跳过了要删除的节点
+                delete tmp;//删除临时指针 tmp 指向的节点
+            }
+            else{
+            ////如果当前节点的下一个节点的值不为val
+                cur = cur->next;//将当前节点更新为下一个节点，继续遍历。
+            }
+        }
+        head = dummyhead->next;
+        delete dummyhead;
+        return head;
+
+    }
+};

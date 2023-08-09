@@ -9,19 +9,20 @@ public:
             //左闭右闭：
 //left 被设置为数组的第一个元素的索引，右边界 right 被设置为数组的最后一个元素的索引。
             int left = 0; //从下标0开始
-
             int right = nums.size() - 1;
             //已有左右边界，进入while循环
             //循环条件是 left <= right，也就是说只要搜索区间不为空，就继续进行查找。这个条件保证了即使搜索区间只剩下一个元素，也会继续查找。
             //循环条件不能使用 middle != target 的原因是，这个条件无法保证在所有情况下都能正确地找到目标值。
             while(left <= right){ //左闭右闭，left=right的情况是合法的
-                int middle = (left + right)/2;
+                int middle = (left + right)/2;//注意middle是一个索引值
                 if (nums[middle] > target){//nums[middle]不是搜索的值，接下来的区间不能包含这个值
                 //通过比较中间元素 nums[middle] 与目标值 target 的大小关系，可以确定目标值在左半部分还是右半部分。
                 //不是比较middle和target！
+                //当nums[middle] 大于 target，说明目标在左半部分，应该更新右边界
                     right = middle - 1;
                 }
                 else if(nums[middle] < target){//更新右区间的左边界
+                //如果 nums[middle] 小于 target，则说明目标值在右半部分，应该更新 left 为 middle + 1
                     left = middle + 1;
                 }
                 else return middle;

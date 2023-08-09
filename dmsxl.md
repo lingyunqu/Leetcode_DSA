@@ -206,7 +206,7 @@ public:
         ListNode* dummyhead = new ListNode(0);
         dummyhead->next = head;
         ListNode* cur = dummyhead; 
-        while(cur->next != NULL){//使用一个 while 循环来遍历链表，直到当前节点 cur 为 NULL 或者当前节点的下一个节点 cur->next 为 NULL
+        while(cur->next != NULL){//使用一个 while 循环来遍历链表，直到当前节点的下一个节点 cur->next 为 NULL。遍历链表并处理每个节点，直到当前节点的下一个节点为 NULL，即遍历到链表的末尾。
             if(cur->next->val==val){//检查当前节点的下一个节点的值是否等于 val
             //如果当前节点的下一个节点的值为val，则需要删除
                 ListNode* tmp = cur->next;//建一个临时指针 tmp 指向当前节点的下一个节点
@@ -224,3 +224,76 @@ public:
 
     }
 };
+
+## 7 
+707. 设计链表
+```
+class MyLinkedList {
+public:
+int size;
+ListNode *head;
+    MyLinkedList() {
+        this->size=0;//size初始化为0
+        this->head=new ListNode(0);//表示创建一个值为 0 的新节点，并将其地址赋给当前对象的 head 成员变量。
+    }
+    
+    int get(int index) {
+        if(index<0||index >=size){//通过条件判断 if (index < 0 || index >= size) 检查索引是否越界。如果索引小于 0 或者大于等于链表的大小 size，则表示索引无效，返回 -1 表示获取失败。
+            return -1;
+        }
+        ListNode* cur = head;//创建一个指针 cur 并将其初始化为链表的头节点 head
+        for(int i=0; i<=index;i++){//循环的终止条件是 i <= index，即循环执行 index + 1 次，使 cur 指向目标节点
+            cur = cur->next;//从头节点开始，依次移动到指定索引位置的节点。
+        }
+        return cur->val;//返回目标节点的值 cur->val。
+    }
+    
+    void addAtHead(int val) {
+        addAtIndex(0, val);
+    }
+    
+    void addAtTail(int val) {
+        addAtIndex(size, val);
+    }
+    
+    void addAtIndex(int index, int val) {
+        if(index > size){
+            return;
+        }
+        index = max(0, index);//使用 max(0, index) 将索引 index 限制在合法范围内，即最小为 0。这是为了确保索引不会小于 0，以防止插入位置为负数。
+        size++;//要插入一个新节点。
+        ListNode *pred = head;//创建一个指针 pred 并将其初始化为链表的头节点 head
+        for(int i=0; i<index; i++){//循环执行 index 次,将 pred 指针移动到要插入位置的前一个节点
+            pred = pred->next;//使 pred 指向插入位置的前一个节点
+        }
+        ListNode *toAdd = new ListNode(val);//创建一个新节点 toAdd，值为 val
+        toAdd->next = pred->next;//将新节点的 next 指针指向 pred 的下一个节点，即插入位置原本的节点。
+        pred->next = toAdd;//将 pred 的 next 指针指向新节点 toAdd，完成节点的插入操作。
+    }
+    
+    void deleteAtIndex(int index) {
+        if(index<0||index >=size){//通过条件判断 if (index < 0 || index >= size) 检查索引是否越界。如果索引小于 0 或者大于等于链表的大小 size，则表示索引无效，返回 -1 表示获取失败。
+            return ;
+        }
+        size--;//表示要删除一个节点。
+        ListNode *pred = head;//创建一个指针 pred 并将其初始化为链表的头节点 head。
+        for(int i=0; i<index; i++){//循环执行 index 次,将 pred 指针移动到要删除位置的前一个节点
+            pred = pred->next;//使 pred 指向删除位置的前一个节点
+        }
+        ListNode *p = pred->next;
+        pred->next = pred->next->next;
+        delete p;
+    }
+
+};
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList* obj = new MyLinkedList();
+ * int param_1 = obj->get(index);
+ * obj->addAtHead(val);
+ * obj->addAtTail(val);
+ * obj->addAtIndex(index,val);
+ * obj->deleteAtIndex(index);
+ */
+ ```

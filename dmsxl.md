@@ -298,3 +298,70 @@ ListNode *head;
  * obj->deleteAtIndex(index);
  */
  ```
+
+## 8
+206
+双指针
+```
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode *cur = head;//
+        ListNode *pre = NULL;//让head翻转后指向null
+        ListNode *tmp = NULL;
+        while(cur!=NULL){
+            tmp=cur->next;//在cur还没和后面分开的时候保存后面的节点
+            cur->next=pre;
+            pre=cur;
+            cur=tmp;
+        }
+        return pre;
+    }
+};
+```
+
+
+## 9
+24两两交换链表中的节点
+```
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        ListNode *dummyhead = new ListNode(0);
+        dummyhead->next=head;
+        ListNode *cur = dummyhead;
+        ListNode *tmp = NULL;
+        ListNode *tmp1 = NULL;
+        while(cur->next!=NULL && cur->next->next!=NULL){
+            tmp = cur->next;//保存节点1
+            tmp1 = cur->next->next->next;//保存节点3
+            cur->next=cur->next->next;//cur指向2
+            cur->next->next=tmp;//2指向1
+            tmp->next=tmp1;//1指向3
+            cur=cur->next->next;//cur后移两位
+        }
+    return dummyhead->next;
+    }
+};
+```
+

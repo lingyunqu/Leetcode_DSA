@@ -66,7 +66,8 @@ public:
         for(fast = 0; fast < nums.size(); fast++){//快指针的移动
             if(nums[fast]!=val){
                 nums[slow] = nums[fast];//将nums[fast]的值赋给nums[slow]。换句话说，它将nums[fast]的值复制到nums[slow]的位置上。这意味着nums[slow]的值将被更新为nums[fast]的值。
-//nums[fast] = nums[slow]：这个表达式将nums[slow]的值赋给nums[fast]。换句话说，它将nums[slow]的值复制到nums[fast]的位置上。这意味着nums[fast]的值将被更新为nums[slow]的值。
+//nums[fast] = nums[slow]将nums[slow]的值赋给nums[fast]。
+//将nums[slow]的值复制到nums[fast]的位置上。这意味着nums[fast]的值将被更新为nums[slow]的值。
                 slow++;
             }
         }

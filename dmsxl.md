@@ -145,11 +145,11 @@ public:
                 num++;
             }
             if (left < right && top < bottom) {// 如果left小于right且top小于bottom，说明还有内部的环需要填充。
-                for (int column = right - 1; column > left; column--) {//使用一个for循环从右到左填充矩阵的下边界。
+                for (int column = right - 1; column >= left; column--) {//使用一个for循环从右到左填充矩阵的下边界。
                     matrix[bottom][column] = num;
                     num++;
                 }
-                for (int row = bottom; row > top; row--) {//使用一个for循环从下到上填充矩阵的左边界。
+                for (int row = bottom-1; row > top; row--) {//使用一个for循环从下到上填充矩阵的左边界。
                     matrix[row][left] = num;
                     num++;
                 }

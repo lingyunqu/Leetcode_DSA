@@ -25,7 +25,7 @@ public:
                 //如果 nums[middle] 小于 target，则说明目标值在右半部分，应该更新 left 为 middle + 1
                     left = middle + 1;
                 }
-                else return middle;
+                else return middle;//如果目标值存在返回下标
             }
     return -1;
     }
@@ -402,3 +402,144 @@ public:
 在这个解决方案中，我们将n的值增加1。这是因为我们需要在fast指针和slow指针之间保持n个节点的间隔。
 假设链表中有k个节点，我们要删除倒数第n个节点。如果我们不将n增加1，那么fast指针将比slow指针多移动n-1个位置，而不是n个位置。这将导致fast指针和slow指针之间的间隔只有n-1个节点，而不是n个节点。
 通过将n增加1，我们确保fast指针和slow指针之间的间隔为n个节点，从而正确地找到倒数第n个节点。这样，当fast指针到达链表末尾时，slow指针将指向倒数第n+1个节点，我们可以轻松删除倒数第n个节点。
+
+## 11
+142
+```
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        ListNode* fast = head;
+        ListNode* slow = head;
+        while(fast != NULL && fast->next != NULL) {//条件是fast指针不为空且fast->next指针也不为空。这是为了确保在遍历过程中不会出现空指针异常。
+            //在每次循环迭代中，slow指针向前移动一步，而fast指针向前移动两步
+            slow = slow->next;
+            fast = fast->next->next;
+            // 快慢指针相遇，此时从head 和 相遇点，同时查找直至相遇
+            if (slow == fast) {
+                ListNode* index1 = fast;
+                ListNode* index2 = head;
+                while (index1 != index2) {
+                    index1 = index1->next;
+                    index2 = index2->next;
+                }
+                return index2; // 返回环的入口
+            }
+        }
+        return NULL;
+    }
+};
+```
+
+## 12
+242
+```
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        int record[26] = {0};//代码定义了一个长度为26的整型数组record，并将数组中的所有元素初始化为0。这个数组被用作哈希表，用于记录每个字母在字符串s中出现的次数。
+        for(int i=0; i<s.size(); i++){
+            record[s[i] - 'a']++; //字母到下标为0做了一个映射
+        }
+        for(int i=0; i<t.size(); i++){
+            record[t[i] - 'a']--;
+        }
+        for(int i=0; i<26; i++){
+            if(record[i]!=0){
+                return false;
+            }
+        }
+        return true;
+    }
+};
+```
+
+
+## 13
+349
+```
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> result_set;
+        unordered_set<int> nums_set(nums1.begin(), nums1.end());//将nums1中的元素通过迭代器传递给nums_set，以初始化nums_set。
+        for (int num : nums2) {//对于nums2里的每一个元素来说，遍历nums2
+            //通过nums_set.find(num)查找nums_set中是否存在与当前num相等的元素。
+            // 发现nums2的元素 在nums_set里又出现过
+            if (nums_set.find(num) != nums_set.end()) {
+                result_set.insert(num);
+            }
+        }
+        return vector<int>(result_set.begin(), result_set.end());//将result_set转换为向量，并返回该向量作为函数的结果
+    }
+};
+```
+
+```
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> result_set; // 存放结果，之所以用set是为了给结果集去重
+        int hash[1005] = {0}; // 默认数值为0
+        for (int i=0; i<nums1.size(); i++) { // nums1中出现的字母在hash数组中做记录
+            hash[nums1[i]] = 1;
+        }
+        for (int i=0; i<nums2.size(); i++) { // nums2中出现话，result记录
+            if (hash[nums2[i]] == 1) {
+                result_set.insert(nums2[i]);
+            }
+        }
+        return vector<int>(result_set.begin(), result_set.end());
+    }
+};
+```
+
+```
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> result_set; // 存放结果，之所以用set是为了给结果集去重
+        int hash[1005] = {0}; // 默认数值为0
+        for (int num : nums1) { // nums1中出现的字母在hash数组中做记录
+            hash[num] = 1;
+        }
+        for (int num : nums2) { // nums2中出现话，result记录
+            if (hash[num] == 1) {
+                result_set.insert(num);
+            }
+        }
+        return vector<int>(result_set.begin(), result_set.end());
+    }
+};
+
+```
+
+## 14
+1
+```
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map <int,int> map;//定义unordered map，用来存放🏪过的元素
+        for(int i = 0; i < nums.size(); i++) {// 遍历当前元素
+            //在map中寻找是否有匹配的key
+            int s = target - nums[i]
+            auto iter = map.find(s); 
+            if(iter != map.end()) {
+                return {iter->second, i};//一个下标是需要的数字，一个下标是当前的数
+            }
+            // 如果没找到匹配对，就把访问过的元素和下标加入到map中
+            map.insert(pair<int, int>(nums[i], i)); 
+        }
+        return {};
+    }
+};
+```

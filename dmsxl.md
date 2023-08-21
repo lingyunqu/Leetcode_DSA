@@ -574,8 +574,9 @@ public:
 先遍历数组A和数组B，统计两个数组元素之和以及出现的次数，并存储在映射中。然后遍历数组C和数组D，在映射中查找是否存在满足条件的键，如果存在，则将对应的值加到统计次数中。最后返回统计的次数。
 
 
+
 ## 16
-18
+15
 ```
 class Solution {
 public:
@@ -611,4 +612,153 @@ public:
         return result;
     }
 };
+```
+
+
+```
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        sort(nums.begin(), nums.end());
+        // 找出a + b + c = 0
+        // a = nums[i], b = nums[left], c = nums[right]
+        for (int i = 0; i < nums.size(); i++) {
+            // 排序之后如果第一个元素已经大于零，那么无论如何组合都不可能凑成三元组，直接返回结果就可以了
+            if (nums[i] > 0) {
+                return result;
+            }
+            // 错误去重a方法，将会漏掉-1,-1,2 这种情况
+            /*
+            if (nums[i] == nums[i + 1]) {
+                continue;
+            }
+            */
+            // 正确去重a方法
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;//如果当前元素与前一个元素相同，那么它们组成的三个数的组合已经在之前的循环中被考虑过了，再次考虑会导致重复的结果。
+            }
+            int left = i + 1;
+            int right = nums.size() - 1;
+            while (right > left) {
+                // 去重复逻辑如果放在这里，0，0，0 的情况，可能直接导致 right<=left 了，从而漏掉了 0,0,0 这种三元组
+                /*
+                while (right > left && nums[right] == nums[right - 1]) right--;
+                while (right > left && nums[left] == nums[left + 1]) left++;
+                */
+                if (nums[i] + nums[left] + nums[right] > 0) right--;
+                else if (nums[i] + nums[left] + nums[right] < 0) left++;
+                else {
+                    result.push_back(vector<int>{nums[i], nums[left], nums[right]});
+                    // 去重逻辑应该放在找到一个三元组之后，对b 和 c去重
+                    while (right > left && nums[right] == nums[right - 1]) right--;//如果右指针指向的元素与前一个元素相同，则将右指针向左移动一位，直到找到不同的元素为止。
+                    while (right > left && nums[left] == nums[left + 1]) left++;//如果左指针指向的元素与后一个元素相同，则将左指针向右移动一位，直到找到不同的元素为止。
+
+                    // 找到答案时，双指针同时收缩
+                    right--;
+                    left++;
+                }
+            }
+
+        }
+        return result;
+    }
+};
+```
+
+## 17
+18
+```
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> result;
+        sort(nums.begin(), nums.end());
+        for (int k = 0; k < nums.size(); k++) {
+            // 剪枝处理
+            if (nums[k] > target && nums[k] >= 0) {//如果当前元素nums[k]大于目标值target并且大于等于0，那么后面的元素都会大于target，可以直接跳出循环
+            	break; // 这里使用break，统一通过最后的return返回
+            }
+            // 对nums[k]去重
+            if (k > 0 && nums[k] == nums[k - 1]) {//如果当前元素与前一个元素相同，则跳过当前循环，避免重复计算。
+                continue;
+            }
+            for (int i = k + 1; i < nums.size(); i++) {//使用变量i来遍历数组中的每个元素，从k+1开始。
+                // 2级剪枝处理
+                if (nums[k] + nums[i] > target && nums[k] + nums[i] >= 0) {//如果当前元素nums[k] + nums[i]大于目标值target并且大于等于0，那么后面的元素都会大于target，可以直接跳出循环。
+                    break;
+                }
+
+                // 对nums[i]去重
+                if (i > k + 1 && nums[i] == nums[i - 1]) {//如果当前元素与前一个元素相同，则跳过当前循环，避免重复计算。
+                    continue;
+                }
+                int left = i + 1;
+                int right = nums.size() - 1;
+                while (right > left) {
+                    // nums[k] + nums[i] + nums[left] + nums[right] > target 会溢出
+                    if ((long) nums[k] + nums[i] + nums[left] + nums[right] > target) {
+                        right--;
+                    // nums[k] + nums[i] + nums[left] + nums[right] < target 会溢出
+                    } else if ((long) nums[k] + nums[i] + nums[left] + nums[right]  < target) {
+                        left++;
+                    } else {
+                        result.push_back(vector<int>{nums[k], nums[i], nums[left], nums[right]});//将这四个数添加到结果数组中
+                        // 对nums[left]和nums[right]去重
+                        while (right > left && nums[right] == nums[right - 1]) right--;//如果右指针指向的元素与前一个元素相同，则将右指针向左移动一位，直到找到不同的元素为止。
+                        while (right > left && nums[left] == nums[left + 1]) left++;//如果左指针指向的元素与后一个元素相同，则将左指针向右移动一位，直到找到不同的元素为止。
+
+                        // 找到答案时，双指针同时收缩
+                        right--;
+                        left++;
+                    }
+                }
+
+            }
+        }
+        return result;
+    }
+};
+
+
+```
+
+## 18
+344
+```
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        for (int i = 0, j = s.size() - 1; i < s.size()/2; i++, j--) {
+            swap(s[i],s[j]);
+        }
+    }
+};
+```
+
+## 19
+541
+```
+class Solution {
+public:
+    string reverseStr(string s, int k) {
+        for (int i = 0; i < s.size(); i += (2 * k)) {
+            // 1. 每隔 2k 个字符的前 k 个字符进行反转
+            // 2. 剩余字符小于 2k 但大于或等于 k 个，则反转前 k 个字符
+            if (i + k <= s.size()) {//判断起始位置i加上k是否小于等于字符串s的长度。
+                reverse(s.begin() + i, s.begin() + i + k );//如果是，说明当前组的长度为2k，可以直接使用reverse函数将起始位置i到i+k的子串进行反转操作。
+            } else {//如果不是，说明当前组的长度小于2k，
+                // 3. 剩余字符少于 k 个，则将剩余字符全部反转。
+                reverse(s.begin() + i, s.end());//将起始位置i到字符串末尾的子串进行反转操作
+            }
+        }
+        return s;
+    }
+};
+```
+
+## 20
+151
+```
+
 ```

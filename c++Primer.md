@@ -149,3 +149,29 @@ enum Points { point2d = 2, point2w,
  pt2w = polygon; // error: polygon is not a Points enumerator
  pt2w = pt3d; // ok: both are objects of Points enum type 
 ```
+如果使用 class 关键字来定义类，那么定义在第一个访问标号前的任何成员都隐式指定为 private；如果使用 struct 关键字，那么这些成员都是public。使用 class 还是 struct 关键字来定义类，仅仅影响默认的初始访问级别。 
+
+定义之后要加分号！ 
+```cpp
+ struct Sales_item {
+ // no need for public label, members are public by default
+ // operations on Sales_item objects
+ private:
+ std::string isbn;
+ unsigned units_sold;
+ double revenue;
+ };
+```
+
+因为头文件包含在多个源文件中，所以不应该含有变量或函数的定义。 有三个例外。头文件可以定义类、值在编译时就已知道的 const 对象和 inline 函数（第 7.6 节介绍 inline 函数）。这些实体可在多个源文件中定义，只要每个源文件中的定义是相同的。
+
+
+为了避免名字冲突，预处理器变量经常用全大写字母表示。
+预处理器变量有两种状态：已定义或未定义。定义预处理器变量和检测其状态所用的预处理器指示不同。#define 指示接受一个名字并定义该名字为预处理器变量。#ifndef 指示检测指定的预处理器变量是否未定义。如果预处理器变量未定义，那么跟在其后的所有指示都被处理，直到出现 #endif。
+可以使用这些设施来预防多次包含同一头文件：
+```cpp
+ #ifndef SALESITEM_H
+ #define SALESITEM_H
+ // Definition of Sales_itemclass and related functions goes here
+ #endif
+```

@@ -105,3 +105,47 @@ int main(){
 
 }
 ```
+
+计算 2 的 10 次方的替代方法： 
+```cpp
+#include <iostream>
+int main(){
+    int value=2;
+    int pow=10;
+    int result=1;
+    for(int cnt=0; cnt!=pow; cnt++){
+        result *= value;
+    }
+    std::cout << value << "raised to the power of " << pow <<":\t" << result << std::endl;
+    return 0;
+}
+```
+编写程序，要求用户输入两个数——底数（base）和指数（exponent），输出底数的指数次方的结果。 
+```cpp
+#include <iostream>
+int main(){
+    std::cout << "Enter two numbers:" << std::endl;
+    int v1, v2;
+    std::cin >> v1 >> v2; // read input
+    // int value=2;
+    // int pow=10;
+    int result=1;
+    for(int cnt=0; cnt<v2; cnt++){
+        result *= v1;
+    }
+    std::cout << v1 << "raised to the power of " << v2 <<":\t" << result << std::endl;
+    return 0;
+}
+```
+
+枚举
+```cpp
+// point2d is 2, point2w is 3, point3d is 3, point3w is 4 
+enum Points { point2d = 2, point2w,
+ point3d = 3, point3w };
+
+ Points pt3d = point3d; // ok: point3d is a Points enumerator
+ Points pt2w = 3; // error: pt2w initialized with int
+ pt2w = polygon; // error: polygon is not a Points enumerator
+ pt2w = pt3d; // ok: both are objects of Points enum type 
+```

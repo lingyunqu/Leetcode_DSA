@@ -182,12 +182,12 @@ if(st.size()=0)
 //ok: empty
 ```
 
-```
+```cpp
 if(st.empty())
 //ok: empty
 ```
 
-```
+```cpp
 string s1("hello, ");
 string s2("world\n");
 string3 = s1 + s2; // s3 is hello, world\n
@@ -198,7 +198,7 @@ s6 = "hello" + ", " + s2; // error: can't add string literals
 当进行 string 对象和字符串字面值混合连接操作时，+ 操作符的左右操作数必须至少有一个是 string 类型的
 
 读入多个string
-```
+```cpp
 #include <iostream>
 #include <string>
 using namespace std;
@@ -214,7 +214,7 @@ int main( )
 }
 ```
 去掉标点
-```
+```cpp
 #include <iostream>
 #include <string>
 #include <cctype>
@@ -235,7 +235,119 @@ int main( )
 ```
 
 ector 是一个类模板(class template)。使用模板可以编写一个类定义 或函数定义，而用于多个不同的数据类型。因此，我们可以定义保存 string 对 象的 vector，或保存 int 值的 vector，又或是保存自定义的类类型对象(如 Sales_items 对象)的 vector。声明从类模板产生的某种类型的对象，需要提供附加信息，信息的种类取决 于模板。以 vector 为例，必须说明 vector 保存何种对象的类型，通过将类型 放在类型放在类模板名称后面的尖括号中来指定类型:
-```
+```cpp
 vector<int> ivec; // ivec holds objects of type int
 vector<Sales_item> Sales_vec; // holds Sales_items
 ```
+
+可以用元素个数和元素值对 vector 对象进行初始化。构造函数用元素个数 来决定 vector 对象保存元素的个数，元素值指定每个元素的初始值:
+```cpp
+vector<int> ivec4(10, -1); // 10 elements, each initialized to -1
+vector<string>svec(10,"hi!"); //10strings,eachinitializedto "hi!"
+```
+读一组整数到 vector 对象，计算并输出每对相邻元素的 和。如果读入元素个数为奇数，则提示用户最后一个元素 没有求和，并输出其值。然后修改程序:头尾元素两两配 对(第一个和最后一个，第二个和倒数第二个，以此类推)， 计算每对元素的和，并输出。
+```
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+int main()
+{
+	vector<int> ivec;
+	int ival;
+	cout << "Enter numbers(Ctrl+Z to end):" << endl;
+	while(cin >> ival)
+	{
+		ivec.push_back(ival);
+	}//用cin读入一组整数并把它们存入一个vector对象中
+ 
+	// 计算相邻元素的和并输出
+	if (ivec.size() == 0) 
+	{
+		cout << "No element?!" << endl;
+		return -1;
+	}
+ 
+	cout << "Sum of each pair of adjacent elements in the vector:"<< endl;
+ 
+	for (vector<int>::size_type ix = 0; ix < ivec.size()-1;ix = ix + 2) 
+	{
+			cout << ivec[ix] + ivec[ix+1] << "\t";
+			if ( (ix+1) % 6 == 0) // 每行输出6 个和
+				cout << endl;
+	}
+ 
+	if (ivec.size() % 2 != 0) // 提示最后一个元素没有求和
+	{
+		cout << endl
+		<< "The last element is not been summed "
+		<< "and its value is "
+		<< ivec[ivec.size()-1] << endl;
+	}
+ 
+	return 0;
+}
+```
+
+### 迭代器iterator
+
+```cpp
+vector<int>::iterator iter = ivec.begin();
+vector<int>::iterator iter = ivec.end();
+```
+由begin返回的迭代器指向第一个元素：假设 vector不空，初始化后，iter 即指该元素为 ivec[0]。
+由 end 操作返回的迭代器指向 vector 的“末端元素的下一个”。“超出 末端迭代器”(off-the-end iterator)。表明它指向了一个不存在的元素。 由 end 操作返回的迭代器并不指向 vector 中任何实际的元 素，相反，它只是起一个哨兵(sentinel)的作用，表示我们 已处理完 vector 中所有元素。
+如果 vector 为空，begin 返回的迭代器与 end 返回的迭代器相同。
+
+用迭代器编写循环：
+```cpp
+for(vector<int>::iterator iter = ivec.begin(); iter!=ivec.end(); iter++){
+    *iter=0;
+}
+```
+for 循环首先定义了 iter，并将它初始化为指向 ivec 的第一个元素。 for 循环的条件测试 iter 是否与 end 操作返回的迭代器不等。每次迭代 iter 都自增 1，这个 for 循环的效果是从 ivec 第一个元素开始，顺序处 理 vector 中的每一元素。最后， iter 将指向 ivec 中的最后一个元素，处理 完最后一个元素后，iter 再增加 1，就会与 end 操作的返回值相等，在这种情况下，循环终止。
+
+编写程序来创建有 10 个元素的 vector 对象。用迭代器 把每个元素值改为当前值的 2 倍。
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+    vector<int> ivec;//创建了一个名为ivec的vector容器，用于存储整数。
+    for(vector<int>::size_type st=0; st<10; st++){ //使用for循环向ivec容器中添加元素。循环变量st的类型是vector<int>::size_type
+        ivec.push_back(st);//使用push_back函数将st添加到ivec容器中
+        cout<<ivec[st]<<endl;//使用cout语句打印出ivec[st]的值。
+    }
+    for(vector<int>::iterator iter=ivec.begin(); iter!=ivec.end(); iter++){//使用另一个for循环遍历ivec容器中的元素。循环变量iter的类型是vector<int>::iterator，它是一个迭代器，用于访问容器中的元素。
+        *iter*=2;//使用解引用操作符*iter来访问当前元素，并将其乘以2。
+        cout<<*iter<<endl;//使用cout语句打印出*iter的值。
+    }
+}
+```
+
+
+### bitset
+```cpp
+bitset<n> b; // b有n 位，每位都 0
+bitset<n> b(u); //b是unsigned
+bitset<n> b(s); //b是string 对象 s 中含有的位串的副本
+bitset<n> b(s, pos, n); //s 中从位置 pos 开始的&nbps;n 个位的副本。
+b.any() // b 中是否存在置为 1 的二进制位?
+b.none() // b 中不存在置为 1 的二进制位吗?
+b.count() // b 中置为 1 的二进制位的个数
+b.size() // b 中二进制位的个数
+b[pos] //访问 b 中在 pos 处二进制位
+b.test(pos) //b 中在 pos 处的二进制位置为 1 么?
+b.set() //把 b 中所有二进制位都置为 1
+b.set(pos) //把 b 中在 pos 处的二进制位置为 1
+b.reset() //把 b 中所有二进制位都置为 0
+b.reset(pos) //把 b 中在 pos 处的二进制位置为 0 
+b.flip() //把 b 中所有二进制位逐位取反
+b.flip(pos) //把 b 中在 pos 处的二进制位取反
+b.to_ulong() //用 b 中同样的二进制位返回一个 unsigned long 值 
+os << b //把 b 中的位集输出到 os 流
+```
+
+                        

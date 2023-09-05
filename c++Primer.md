@@ -175,3 +175,67 @@ enum Points { point2d = 2, point2w,
  // Definition of Sales_itemclass and related functions goes here
  #endif
 ```
+
+
+```
+if(st.size()=0)
+//ok: empty
+```
+
+```
+if(st.empty())
+//ok: empty
+```
+
+```
+string s1("hello, ");
+string s2("world\n");
+string3 = s1 + s2; // s3 is hello, world\n
+s1 += s2; // equivalent to s1 = s1 + s2
+string s5 = s1 + ", " + "world"; // ok: each + has string operand string
+s6 = "hello" + ", " + s2; // error: can't add string literals
+```
+当进行 string 对象和字符串字面值混合连接操作时，+ 操作符的左右操作数必须至少有一个是 string 类型的
+
+读入多个string
+```
+#include <iostream>
+#include <string>
+using namespace std;
+int main( )
+{
+    string str, ss;
+    cout<<"请输入字符串：\n";
+    while(cin>>str)
+        ss = ss + str;
+    cout<<"连接后的字符串为："<<ss<<endl;
+    system("PAUSE");
+    return 0;
+}
+```
+去掉标点
+```
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+int main( )
+{
+    string str, ss;
+    cout<<"请输入字符串：\n";
+    getline(cin, str);
+    for(string::size_type i=0; i!=str.size(); ++i) {
+        if(!ispunct(str[i]))
+            ss+=str[i];
+    }
+    cout<<"连接后的字符串为："<<ss<<endl;
+    system("PAUSE");
+    return 0;
+}
+```
+
+ector 是一个类模板(class template)。使用模板可以编写一个类定义 或函数定义，而用于多个不同的数据类型。因此，我们可以定义保存 string 对 象的 vector，或保存 int 值的 vector，又或是保存自定义的类类型对象(如 Sales_items 对象)的 vector。声明从类模板产生的某种类型的对象，需要提供附加信息，信息的种类取决 于模板。以 vector 为例，必须说明 vector 保存何种对象的类型，通过将类型 放在类型放在类模板名称后面的尖括号中来指定类型:
+```
+vector<int> ivec; // ivec holds objects of type int
+vector<Sales_item> Sales_vec; // holds Sales_items
+```

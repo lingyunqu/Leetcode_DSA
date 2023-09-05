@@ -350,4 +350,67 @@ b.to_ulong() //用 b 中同样的二进制位返回一个 unsigned long 值
 os << b //把 b 中的位集输出到 os 流
 ```
 
-                        
+ 考虑这样的序列 1，2，3，5，8，13，21，并初始化一个 将该序列数字所对应的位置置为 1 的 bitset<32> 对 象。然后换个方法，给定一个空的 bitset，编写一小段 程序把相应的数位设置为 1。
+ ```cpp
+#include <iostream>
+#include <bitset>
+using namespace std;
+
+int main()
+{
+    /*
+    因为bitset读入位集的顺序是从右向左：最右侧是低阶位，最左是高阶位。
+    00000000010000000010000100101110是满足要求的序列，
+    其对应的十六进制表示是0x20212e，
+    最简单的方法是：
+    bitset<32> bitvec("00000000010000000010000100101110");
+    或者是：
+    bitset<32> bitvec(0x20212e);
+    以下使用另一种方法：
+    */
+    bitset<32> bitvec;
+    int x = 0, y = 1;
+    int z = x + y;
+    while (z <= 21)
+    {
+        bitvec.set(z);
+        // 1,2,3,5,8,13,21 其实是斐波那契数列
+        x = y;
+        y = z;
+        z = x + y;
+    }
+    cout << bitvec << bitvec.count() << endl;
+
+    return 0;
+}
+```
+
+## 数组
+```cpp
+ const unsigned array_size = 3;
+int ia[array_size] = {0, 1, 2};
+//等价于
+int ia[] = {0, 1, 2}; // an array of dimension 3
+```
+
+把一个数组复制给另一个数组
+```cpp
+int main() {
+uninitialized
+    const size_t array_size = 7;
+    int ia1[] = { 0, 1, 2, 3, 4, 5, 6 };
+    int ia2[array_size]; // local array, elements
+    // copy elements from ia1 into ia2
+    for (size_t ix = 0; ix != array_size; ++ix)
+          ia2[ix] = ia1[ix];
+    return 0;
+}
+```
+
+## 指针
+```cpp
+vector<int> *pvec; // pvec can point to a vector<int> 
+int *ip1, *ip2; // ip1 and ip2 can point to an int
+string  *pstring; // pstring can point to a string
+double *dp; // dp can point to a double
+```

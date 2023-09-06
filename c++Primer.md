@@ -445,4 +445,16 @@ int main()
   *p = b：改变了指针所指向的变量的值
   p = &c：只改变了指针的值
 
-
+## 数组
+初始化二维数组
+```cpp
+     const size_t rowSize = 3;
+     const size_t colSize = 4;
+     int ia [rowSize][colSize];   // 12 uninitialized elements
+     // for each row
+     for (size_t i = 0; i != rowSize; ++i)
+         // for each column within the row
+         for (size_t j = 0; j != colSize; ++j)
+             // initialize to its positional index
+             ia[i][j] = i * colSize + j;
+```

@@ -458,3 +458,37 @@ int main()
              // initialize to its positional index
              ia[i][j] = i * colSize + j;
 ```
+数组的指针
+```cpp
+int ia[3][4]; // array of size 3, each element is an array of ints of size 4
+     int (*ip)[4] = ia; // ip points to an array of 4 ints
+     ip = &ia[2];       // ia[2] is an array of 4 ints
+```
+
+```cpp
+ int *ip[4]; // array of pointers to int
+     int (*ip)[4]; // pointer to an array of 4 ints
+```
+
+一组嵌套的条件操作符求出三个变量的最大值，并将最大值赋给 max:
+```cpp
+int max = i > j
+		?i>k?i: k
+		: j > k ? j : k;
+ int max = i;
+     if (j > max)
+         max = j;
+     if (k > max)
+         max = k;
+```
+
+将一个数组的内容复制到另一个数组
+```cpp
+// arr1 is an array of ints
+int *source = arr1;
+size_t sz = sizeof(arr1)/sizeof(*arr1); // number of elements
+int *dest = new int[sz]; // uninitialized elements
+//首先初始化 source 和 dest，并使它们各自指向所关联的数组的第一个元 素
+while (source != arr1 + sz)//while 循环条件判断是否已经到达要复制的数组的末尾。如果没有，继续执 行循环。
+         *dest++ = *source++; //  copy element and increment pointers
+```
